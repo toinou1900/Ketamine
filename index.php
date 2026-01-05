@@ -36,6 +36,6 @@
         </div>
     </nav>
 <body>
-    <p>Hello, World!</p>
+    <p>Nothing yet...</p>
 </body>
 </html>

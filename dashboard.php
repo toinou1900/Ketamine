@@ -36,6 +36,30 @@
         </div>
     </nav>
 <body>
-    <p>Hello, World!</p>
+    <div class="card" style="width: 20rem; margin: 1rem; padding: 1rem;">
+        <h5 class="card-title">Dashboard</h5>
+        <p class="card-text">Welcome to your dashboard.</p>
+    </div>
+    <div class="card" style="width: 20rem; margin: 1rem; padding: 1rem;">
+        <h5 class="card-title">Statistics</h5>
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Doliprane
+                <span class="badge text-bg-primary rounded-pill" id="doliprane">Loading...</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Paracetamol 500mg
+                <span class="badge text-bg-primary rounded-pill" id="paracetamol">Loading...</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Ibuprofen 200mg
+                <span class="badge text-bg-primary rounded-pill" id="ibuprofen">Loading...</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Aspirin 100mg
+                <span class="badge text-bg-primary rounded-pill" id="aspirin">Loading...</span>
+            </li>
+        </ul>
+    </div>
 </body>
 </html>

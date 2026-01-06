@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $message = htmlspecialchars($_POST["message"]);
     
     // Adresse email où recevoir les messages
-    $email_destination = "votre-email@example.com";
+    $email_destination = "toinou.asselin@gmail.com";
     
     // Sujet de l'email
     $subject = "Nouveau message de contact";

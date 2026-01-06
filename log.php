@@ -1,6 +1,7 @@
 <?php
 
 ?>
+/* use sendmail (must be installed on the server) */
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -38,7 +38,7 @@
 <body>
     <div class="card" style="width: 20rem; margin: 1rem; padding: 1rem;">
         <h5 class="card-title">Dashboard</h5>
-        <p class="card-text">Welcome to your dashboard.</p>
+        <p class="card-text">Welcome to the dashboard.</p>
     </div>
     <div class="card" style="width: 20rem; margin: 1rem; padding: 1rem;">
         <h5 class="card-title">Statistics</h5>

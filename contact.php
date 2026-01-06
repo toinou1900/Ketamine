@@ -1,5 +1,33 @@
 <?php
-
+// Vérifier si le formulaire a été soumis
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Récupérer les données du formulaire
+    $email_client = htmlspecialchars($_POST["email"]);
+    $message = htmlspecialchars($_POST["message"]);
+    
+    // Adresse email où recevoir les messages
+    $email_destination = "votre-email@example.com";
+    
+    // Sujet de l'email
+    $subject = "Nouveau message de contact";
+    
+    // Corps de l'email
+    $body = "Vous avez reçu un nouveau message de contact.\n\n";
+    $body .= "Email de l'utilisateur: " . $email_client . "\n";
+    $body .= "Message:\n" . $message;
+    
+    // En-têtes (headers)
+    $headers = "From: " . $email_client . "\r\n";
+    $headers .= "Reply-To: " . $email_client . "\r\n";
+    $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+    
+    // Envoyer l'email
+    if (mail($email_destination, $subject, $body, $headers)) {
+        $success_message = "Votre message a été envoyé avec succès!";
+    } else {
+        $error_message = "Erreur lors de l'envoi du message.";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,15 +65,28 @@
     </nav>
 <body>
     <div class="card" style="width: 20rem; margin: 1rem; padding: 1rem;">
-        <form>
+        <!-- Afficher le message de succès ou d'erreur -->
+        <?php if (isset($success_message)): ?>
+            <div class="alert alert-success" role="alert">
+                <?php echo $success_message; ?>
+            </div>
+        <?php endif; ?>
+        
+        <?php if (isset($error_message)): ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo $error_message; ?>
+            </div>
+        <?php endif; ?>
+        
+        <form method="POST">
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" required>
                 <div id="emailHelp" class="form-text">We'll never share your email with anyone.</div>
             </div>
             <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>    
+                <label for="exampleFormControlTextarea1" class="form-label">Message</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" name="message" rows="3" required></textarea>    
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

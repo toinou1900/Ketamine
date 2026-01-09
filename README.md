@@ -1,2 +1,2 @@
 # Kétamine
-A web page (hub) for for distante control
+A web page (hub) for distante control

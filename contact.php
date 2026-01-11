@@ -86,13 +86,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="card" style="width: 20rem; margin: 1rem; padding: 1rem;">
         <!-- Afficher le message de succès ou d'erreur -->
-        <?php if (isset($success_message)): ?>
+        <?php if (!empty($success_message)): ?>
             <div class="alert alert-success" role="alert">
                 <?php echo $success_message; ?>
             </div>
         <?php endif; ?>
         
-        <?php if (isset($error_message)): ?>
+        <?php if (!empty($error_message)): ?>
             <div class="alert alert-danger" role="alert">
                 <?php echo $error_message; ?>
             </div>

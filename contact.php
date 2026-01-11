@@ -1,31 +1,50 @@
 <?php
+require 'vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+$success_message = "";
+$error_message = "";
+
 // Vérifier si le formulaire a été soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Récupérer les données du formulaire
     $email_client = htmlspecialchars($_POST["email"]);
     $message = htmlspecialchars($_POST["message"]);
     
-    // Adresse email où recevoir les messages
-    $email_destination = "toinou.asselin@gmail.com";
+    // Initialiser PHPMailer
+    $mail = new PHPMailer(true);
     
-    // Sujet de l'email
-    $subject = "Nouveau message de contact";
-    
-    // Corps de l'email
-    $body = "Vous avez reçu un nouveau message de contact.\n\n";
-    $body .= "Email de l'utilisateur: " . $email_client . "\n";
-    $body .= "Message:\n" . $message;
-    
-    // En-têtes (headers)
-    $headers = "From: " . $email_client . "\r\n";
-    $headers .= "Reply-To: " . $email_client . "\r\n";
-    $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-    
-    // Envoyer l'email
-    if (mail($email_destination, $subject, $body, $headers)) {
+    try {
+        // Configuration SMTP Gmail
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->Port = 587;
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        
+        // Remplacez par vos informations Gmail
+        $mail->Username = 'toinou.asselin@gmail.com';
+        $mail->Password = 'jawg mcjq qtyv qsxf ';
+        
+        // Adresse email où recevoir les messages
+        $mail->setFrom($email_client, $email_client);
+        $mail->addAddress('toinou.asselin@gmail.com');
+        $mail->addReplyTo($email_client);
+        
+        // Contenu de l'email
+        $mail->isHTML(false);
+        $mail->Subject = "Nouveau message de contact";
+        $mail->Body = "Vous avez reçu un nouveau message de contact.\n\n";
+        $mail->Body .= "Email de l'utilisateur: " . $email_client . "\n";
+        $mail->Body .= "Message:\n" . $message;
+        
+        // Envoyer l'email
+        $mail->send();
         $success_message = "Votre message a été envoyé avec succès!";
-    } else {
-        $error_message = "Erreur lors de l'envoi du message.";
+    } catch (Exception $e) {
+        $error_message = "Erreur lors de l'envoi du message: " . $mail->ErrorInfo;
     }
 }
 ?>

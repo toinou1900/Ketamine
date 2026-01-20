@@ -70,13 +70,18 @@ $medicines = fetchAll("SELECT * FROM medicines ORDER BY name ASC");
                                 echo '<li class="list-group-item text-danger"><span class="badge bg-danger me-2">⚠️</span>Aucun médicament trouvé. Lancez db_init.php d\'abord!</li>';
                             } else {
                                 foreach ($medicines as $medicine): 
+                                    $low_stock = $medicine['stock'] < 20;
+                                    $badge_color = $low_stock ? 'bg-danger' : 'bg-primary';
                             ?>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <li class="list-group-item d-flex justify-content-between align-items-center <?php echo $low_stock ? 'bg-warning bg-opacity-10' : ''; ?>">
                                 <div>
                                     <strong><?php echo htmlspecialchars($medicine['name']); ?></strong>
                                     <br><small class="text-muted"><?php echo htmlspecialchars($medicine['category']); ?></small>
+                                    <?php if ($low_stock): ?>
+                                        <br><small class="text-danger fw-bold">⚠️ Stock faible!</small>
+                                    <?php endif; ?>
                                 </div>
-                                <span class="badge bg-primary rounded-pill"><?php echo $medicine['stock']; ?></span>
+                                <span class="badge <?php echo $badge_color; ?> rounded-pill"><?php echo $medicine['stock']; ?></span>
                             </li>
                             <?php 
                                 endforeach;

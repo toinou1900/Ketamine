@@ -27,18 +27,14 @@ try {
     ");
     echo "<p>✓ Table 'websiteuser' créée/vérifiée</p>";
 
-    // Table: user (utilisateurs normaux du site)
+    // Table: user (utilisateurs avec traitements)
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS user (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            first_name TEXT,
-            last_name TEXT,
-            phone TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            hex_id TEXT PRIMARY KEY,
+            username TEXT NOT NULL,
+            treatment_status INTEGER DEFAULT 0,
+            decimal_value REAL DEFAULT 0.0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ");
     echo "<p>✓ Table 'user' créée/vérifiée</p>";

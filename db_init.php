@@ -14,9 +14,9 @@ echo "<h2>Initialisation de la base de données Ketamine</h2>";
 
 try {
     
-    // Table: users (utilisateurs)
+    // Table: websiteuser (utilisateurs du site)
     $pdo->exec("
-        CREATE TABLE IF NOT EXISTS users (
+        CREATE TABLE IF NOT EXISTS websiteuser (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
             email TEXT UNIQUE NOT NULL,
@@ -25,35 +25,37 @@ try {
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ");
-    echo "<p>✓ Table 'users' créée/vérifiée</p>";
+    echo "<p>✓ Table 'websiteuser' créée/vérifiée</p>";
 
-    // Table: contacts (messages de contact)
+    // Table: user (utilisateurs normaux du site)
     $pdo->exec("
-        CREATE TABLE IF NOT EXISTS contacts (
+        CREATE TABLE IF NOT EXISTS user (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            email TEXT NOT NULL,
-            subject TEXT NOT NULL,
-            message TEXT NOT NULL,
-            status TEXT DEFAULT 'unread',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    ");
-    echo "<p>✓ Table 'contacts' créée/vérifiée</p>";
-
-    // Table: logs (historique)
-    $pdo->exec("
-        CREATE TABLE IF NOT EXISTS logs (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
-            action TEXT NOT NULL,
-            description TEXT,
-            ip_address TEXT,
+            username TEXT UNIQUE NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            first_name TEXT,
+            last_name TEXT,
+            phone TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ");
-    echo "<p>✓ Table 'logs' créée/vérifiée</p>";
+    echo "<p>✓ Table 'user' créée/vérifiée</p>";
+
+    // Table: treatment (traitements des patients)
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS treatment (
+            hex_id TEXT PRIMARY KEY,
+            user_id INTEGER NOT NULL,
+            username TEXT NOT NULL,
+            treatment_status INTEGER DEFAULT 0,
+            decimal_value REAL DEFAULT 0.0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+        )
+    ");
+    echo "<p>✓ Table 'treatment' créée/vérifiée</p>";
 
     // Table: medicines (inventaire de médicaments)
     $pdo->exec("
@@ -98,7 +100,7 @@ try {
     }
 
     // Créer un utilisateur admin par défaut
-    $admin_count = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
+    $admin_count = $pdo->query("SELECT COUNT(*) FROM websiteuser")->fetchColumn();
     
     if ($admin_count == 0) {
         // Créer les utilisateurs de test
@@ -106,13 +108,13 @@ try {
         $user_password = password_hash('user123', PASSWORD_DEFAULT);
         
         insertAndGetId(
-            "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
+            "INSERT INTO websiteuser (username, email, password) VALUES (?, ?, ?)",
             ['admin', 'admin@ketamine.local', $admin_password]
         );
         echo "<p>✓ Utilisateur admin créé (user: <code>admin</code> | pass: <code>admin123</code>)</p>";
         
         insertAndGetId(
-            "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
+            "INSERT INTO websiteuser (username, email, password) VALUES (?, ?, ?)",
             ['user', 'user@ketamine.local', $user_password]
         );
         echo "<p>✓ Utilisateur test créé (user: <code>user</code> | pass: <code>user123</code>)</p>";

@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         $new_password = $_POST['new_password'] ?? '';
         $confirm_password = $_POST['confirm_password'] ?? '';
 
-        $current_user = fetchOne("SELECT password FROM users WHERE id = ?", [$_SESSION['admin_id']]);
+        $current_user = fetchOne("SELECT password FROM websiteuser WHERE id = ?", [$_SESSION['admin_id']]);
 
         if (!password_verify($old_password, $current_user['password'])) {
             $message = '<div class="alert alert-danger">❌ Ancien mot de passe incorrect!</div>';
@@ -31,8 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             $message = '<div class="alert alert-danger">❌ Les mots de passe ne correspondent pas!</div>';
         } else {
             $hashed = password_hash($new_password, PASSWORD_DEFAULT);
-            executeQuery("UPDATE users SET password = ? WHERE id = ?", [$hashed, $_SESSION['admin_id']]);
-            logAction($_SESSION['admin_id'], 'change_password', 'Changement de mot de passe');
+            executeQuery("UPDATE websiteuser SET password = ? WHERE id = ?", [$hashed, $_SESSION['admin_id']]);
             $message = '<div class="alert alert-success">✅ Mot de passe changé avec succès!</div>';
         }
     }
@@ -50,10 +49,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             try {
                 $hashed = password_hash($new_password, PASSWORD_DEFAULT);
                 insertAndGetId(
-                    "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
+                    "INSERT INTO websiteuser (username, email, password) VALUES (?, ?, ?)",
                     [$new_username, $new_email, $hashed]
                 );
-                logAction($_SESSION['admin_id'], 'add_user', 'Création utilisateur: ' . $new_username);
                 $message = '<div class="alert alert-success">✅ Utilisateur créé avec succès!</div>';
             } catch (PDOException $e) {
                 $message = '<div class="alert alert-danger">❌ Cet utilisateur existe déjà!</div>';
@@ -63,9 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 }
 
 // Récupérer les infos actuelles
-$current_user = fetchOne("SELECT * FROM users WHERE id = ?", [$_SESSION['admin_id']]);
-$all_users = fetchAll("SELECT id, username, email, created_at FROM users");
-$recent_logs = fetchAll("SELECT l.*, u.username FROM logs l LEFT JOIN users u ON l.user_id = u.id ORDER BY l.created_at DESC LIMIT 20");
+$current_user = fetchOne("SELECT * FROM websiteuser WHERE id = ?", [$_SESSION['admin_id']]);
+$all_users = fetchAll("SELECT id, username, email, created_at FROM websiteuser");
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -124,7 +121,6 @@ $recent_logs = fetchAll("SELECT l.*, u.username FROM logs l LEFT JOIN users u ON
                     <nav class="nav flex-column">
                         <a href="#dashboard" class="nav-link active" data-bs-toggle="tab">📊 Dashboard</a>
                         <a href="#users" class="nav-link" data-bs-toggle="tab">👥 Utilisateurs</a>
-                        <a href="#logs" class="nav-link" data-bs-toggle="tab">📋 Historique</a>
                         <a href="#settings" class="nav-link" data-bs-toggle="tab">⚡ Paramètres</a>
                     </nav>
 
@@ -235,52 +231,6 @@ $recent_logs = fetchAll("SELECT l.*, u.username FROM logs l LEFT JOIN users u ON
                                             </td>
                                             <td><?php echo htmlspecialchars($user['email']); ?></td>
                                             <td><?php echo date('d/m/Y', strtotime($user['created_at'])); ?></td>
-                                        </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Logs Tab -->
-                    <div class="tab-pane fade" id="logs">
-                        <h2>📋 Historique des Actions</h2>
-
-                        <div class="card mt-3">
-                            <div class="card-header bg-info text-white">
-                                <h5 class="mb-0">🔍 20 dernières actions</h5>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Utilisateur</th>
-                                            <th>Action</th>
-                                            <th>Description</th>
-                                            <th>IP</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($recent_logs as $log): ?>
-                                        <tr>
-                                            <td><?php echo date('d/m/Y H:i:s', strtotime($log['created_at'])); ?></td>
-                                            <td><?php echo htmlspecialchars($log['username'] ?? 'N/A'); ?></td>
-                                            <td>
-                                                <?php 
-                                                $action_badge = match($log['action']) {
-                                                    'login' => '<span class="badge bg-success">login</span>',
-                                                    'logout' => '<span class="badge bg-warning">logout</span>',
-                                                    'change_password' => '<span class="badge bg-info">change_password</span>',
-                                                    'add_user' => '<span class="badge bg-primary">add_user</span>',
-                                                    default => '<span class="badge bg-secondary">' . htmlspecialchars($log['action']) . '</span>'
-                                                };
-                                                echo $action_badge;
-                                                ?>
-                                            </td>
-                                            <td><?php echo htmlspecialchars($log['description'] ?? '-'); ?></td>
-                                            <td><small><?php echo htmlspecialchars($log['ip_address'] ?? 'N/A'); ?></small></td>
                                         </tr>
                                         <?php endforeach; ?>
                                     </tbody>

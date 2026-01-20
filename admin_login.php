@@ -25,19 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = '❌ Veuillez remplir tous les champs!';
     } else {
         // Chercher l'utilisateur
-        $user = fetchOne("SELECT id, username, password FROM users WHERE username = ?", [$username]);
+        $user = fetchOne("SELECT id, username, password FROM websiteuser WHERE username = ?", [$username]);
 
         if ($user && password_verify($password, $user['password'])) {
             // Authentification réussie
             $_SESSION['admin_id'] = $user['id'];
             $_SESSION['admin_username'] = $user['username'];
-            
-            // Logger la connexion
-            $ip = $_SERVER['REMOTE_ADDR'] ?? 'Unknown';
-            executeQuery(
-                "INSERT INTO logs (user_id, action, description, ip_address) VALUES (?, ?, ?, ?)",
-                [$user['id'], 'login', 'Connexion admin', $ip]
-            );
             
             header('Location: admin.php');
             exit;

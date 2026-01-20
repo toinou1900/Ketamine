@@ -36,7 +36,7 @@
             </div>
         </div>
     </nav>
-<body>
+<body style="display: flex;">
     <div class="card" style="width: 20rem; margin: 1rem; padding: 1rem;">
         <h5 class="card-title">Dashboard</h5>
         <p class="card-text">Welcome to the dashboard.</p>
@@ -60,7 +60,34 @@
                 Aspirin 100mg
                 <span class="badge text-bg-primary rounded-pill" id="aspirin">Loading...</span>
             </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                object 5
+                <span class="badge text-bg-primary rounded-pill" id="#">Loading...</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                object 6
+                <span class="badge text-bg-primary rounded-pill" id="#">Loading...</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                object 7
+                <span class="badge text-bg-primary rounded-pill" id="#">Loading...</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                object 8
+                <span class="badge text-bg-primary rounded-pill" id="#">Loading...</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                object 9
+                <span class="badge text-bg-primary rounded-pill" id="#">Loading...</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                object 10
+                <span class="badge text-bg-primary rounded-pill" id="#">Loading...</span>
+            </li>
         </ul>
+    </div>
+    <div class="card" style="width: 20rem; margin: 1rem; padding: 1rem;">
+        <h5 class="card-title">User Control Center [UCC]</h5>
     </div>
 </body>
 </html>

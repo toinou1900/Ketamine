@@ -41,7 +41,6 @@ $medicines = fetchAll("SELECT * FROM medicines ORDER BY name ASC");
             </div>
         </nav>
     </header>
-
     <main class="container-fluid py-4">
         <div class="row g-4">
             <!-- Dashboard Info Card -->

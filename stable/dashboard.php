@@ -32,9 +32,6 @@ $medicines = fetchAll("SELECT * FROM medicines ORDER BY name ASC");
                     <li class="nav-item">
                         <a class="nav-link" href="contact.php">Contact</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" aria-disabled="true" href="log.php">Log (coming soon)</a>
-                    </li>
                 </ul>
             </div>
         </div>

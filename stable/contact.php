@@ -76,13 +76,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <li class="nav-item">
                         <a class="nav-link" href="contact.php">Contact</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" aria-disabled="true" href="log.php">Log (coming soon)</a>
-                    </li>
                 </ul>
             </div>
         </div>
     </nav>
+</header>
 <body>
     <div class="card" style="width: 20rem; margin: 1rem; padding: 1rem;">
         <!-- Afficher le message de succès ou d'erreur -->

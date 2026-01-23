@@ -35,8 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         // Contenu de l'email
         $mail->isHTML(false);
-        $mail->Subject = "Nouveau message de contact";
-        $mail->Body = "Vous avez reçu un nouveau message de contact.\n\n";
+        $mail->Subject = "Notification De Contact depuis le site Ketamine";
+        $mail->Body = "Vous avez reçu un nouveau message d'un utilisateur de Ketamine.\n\n";
         $mail->Body .= "Email de l'utilisateur: " . $email_client . "\n";
         $mail->Body .= "Message:\n" . $message;
         

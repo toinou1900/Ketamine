@@ -52,7 +52,6 @@ $medicines = fetchAll("SELECT * FROM medicines ORDER BY name ASC");
                 <li class="list-group-item d-flex justify-content-between align-items-center <?php echo $low_stock ? 'bg-warning bg-opacity-10' : ''; ?>">
                     <div>
                         <strong><?php echo htmlspecialchars($medicine['name']); ?></strong>
-                        <br><small class="text-muted"><?php echo htmlspecialchars($medicine['category']); ?></small>
                         <?php if ($low_stock): ?>
                             <br><small class="text-danger fw-bold">⚠️ Stock faible!</small>
                         <?php endif; ?>

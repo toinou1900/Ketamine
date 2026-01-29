@@ -153,8 +153,8 @@ $all_users = fetchAll("SELECT id, username, email, created_at FROM websiteuser")
                             </div>
                             <div class="col-md-4">
                                 <div class="card text-center p-3">
-                                    <h3 class="text-success"><?php echo count($recent_logs); ?></h3>
-                                    <p class="text-muted mb-0">Actions récentes</p>
+                                    <h3 class="text-success">.<?php echo count($recent_logs); ?></h3>
+                                    <p class="text-muted mb-0">Actions récentes</p
                                 </div>
                             </div>
                             <div class="col-md-4">

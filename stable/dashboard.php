@@ -2,8 +2,8 @@
 require_once 'db_config.php';
 
 // Récupérer tous les médicaments de la base de données
-$medicines = fetchAll("SELECT * FROM medicines ORDER BY name ASC");
-$patients = fetchAll("SELECT * FROM patients ORDER BY name ASC");
+$medicines = fetchAll("SELECT * FROM medicines ORDER BY id ASC");
+$patients = fetchAll("SELECT * FROM patients ORDER BY id ASC");
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -40,7 +40,7 @@ $patients = fetchAll("SELECT * FROM patients ORDER BY name ASC");
 </header>
 <body>
     <div style="display: flex;">
-    <div class="card" style="width: 20rem; margin: 1rem; padding: 1rem;">
+    <div class="card" style="width: auto; margin: 1rem; padding: 1rem;">
         <div class="card-body">
             <h5 class="card-title">Stock | Advanced viewer </h5>
             <small class="text-muted">💊 Total: <strong><?php echo count($medicines); ?></strong> médicaments</small>
@@ -53,14 +53,18 @@ $patients = fetchAll("SELECT * FROM patients ORDER BY name ASC");
                     $badge_color = $low_stock ? 'bg-danger' : 'bg-primary';
             ?>
             <li class="list-group-item d-flex justify-content-between align-items-center <?php echo $low_stock ? 'bg-warning bg-opacity-10' : ''; ?>">
-                <div>
-                    <strong><?php echo htmlspecialchars($medicine['name']); ?></strong>
-                    <br><small class="text-muted"><?php echo htmlspecialchars($medicine['category']); ?></small>
-                    <?php if ($low_stock): ?>
-                        <br><small class="text-danger fw-bold">⚠️ Stock faible!</small>
-                    <?php endif; ?>
-                </div>
-                <span class="badge <?php echo $badge_color; ?> rounded-pill"><?php echo $medicine['stock']; ?></span>
+                <!-- MAKE THEM IN A BOX -->
+                <!--<div class="card" style="width: 15rem; display: flex;">-->
+                    <div>
+                        <strong><?php echo htmlspecialchars($medicine['name']); ?></strong>
+                        <br><small class="text-muted"><?php echo htmlspecialchars($medicine['category']); ?></small>
+                        <br><small class="text-muted"><?php echo htmlspecialchars($medicine['description']); ?></small>
+                        <?php if ($low_stock): ?>
+                            <br><small class="text-danger fw-bold">⚠️ Stock faible!</small>
+                        <?php endif; ?>
+                    </div>
+                    <span class="badge <?php echo $badge_color; ?> rounded-pill"><?php echo $medicine['stock']; ?></span>
+                <!--</div>-->
             </li>
             <?php 
                 endforeach;
@@ -68,7 +72,7 @@ $patients = fetchAll("SELECT * FROM patients ORDER BY name ASC");
             ?>
         </div>
     </div>
-    <div class="card" style="width: 20rem; margin: 1rem; padding: 1rem;">
+    <div class="card" style="width: auto; margin: 1rem; padding: 1rem; text-align: center;">
         <div class="card-body">
             <h5 class="card-title">Patients | Advanced viewer </h5>
             <small class="text-muted">👨‍⚕️ Total: <strong><?php echo count($patients); ?></strong> patients</small>
@@ -80,7 +84,7 @@ $patients = fetchAll("SELECT * FROM patients ORDER BY name ASC");
                 foreach ($patients as $patient): 
             ?>
                 <div>
-                    <strong><?php echo htmlspecialchars($patient['name']); ?></strong>
+                    <strong><?php echo htmlspecialchars('id : ' . $patient['id']. ' name : ' . $patient['name'] . ' ' . $patient['last_name']); ?></strong>
                 </div>
             </li>
             <?php 

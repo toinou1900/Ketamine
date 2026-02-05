@@ -2,7 +2,8 @@
 require_once 'db_config.php';
 
 // Récupérer tous les médicaments de la base de données
-$medicines = fetchAll("SELECT * FROM medicines ORDER BY name ASC");
+$medicines = fetchAll("SELECT * FROM medicines ORDER BY id ASC");
+$patients = fetchAll("SELECT * FROM patients ORDER BY id ASC");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,6 +39,7 @@ $medicines = fetchAll("SELECT * FROM medicines ORDER BY name ASC");
     </nav>
 </header>
 <body>
+    <div style="display: flex;">
     <div class="card" style="width: 20rem; margin: 1rem; padding: 1rem;">
         <div class="card-body">
             <h5 class="card-title">Stock</h5>
@@ -62,6 +64,27 @@ $medicines = fetchAll("SELECT * FROM medicines ORDER BY name ASC");
                 }
                 ?>
         </div>
+    </div>
+    <div class="card" style="width: 20rem; margin: 1rem; padding: 1rem;">
+        <div class="card-body">
+            <h5 class="card-title">Patients</h5>
+            
+            <?php 
+            if (empty($patients)) {
+                echo '<li class="list-group-item text-danger"><span class="badge bg-danger me-2">⚠️</span>Aucun patient trouvé. Lancez db_init.php d\'abord!</li>';
+            } else {
+                foreach ($patients as $patient): 
+            ?>
+                <div>
+                    <strong><?php echo htmlspecialchars($patient['name']); ?></strong>
+                </div>
+            </li>
+            <?php 
+                endforeach;
+            }
+            ?>
+        </div>
+    </div>
     </div>
 </body>
 </html>

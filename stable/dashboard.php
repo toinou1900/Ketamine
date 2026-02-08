@@ -39,6 +39,14 @@ $patients = fetchAll("SELECT * FROM patients ORDER BY id ASC");
     </nav>
 </header>
 <body>
+    <?php if (isset($_GET['refilled'])): ?>
+        <?php $n = (int)$_GET['refilled']; ?>
+        <?php if ($n > 0): ?>
+            <div class="alert alert-success" role="alert">Refilled <?php echo $n; ?> item(s).</div>
+        <?php else: ?>
+            <div class="alert alert-warning" role="alert">No items were refilled.</div>
+        <?php endif; ?>
+    <?php endif; ?>
     <div style="display: flex;">
     <div class="card" style="width: auto; margin: 1rem; padding: 1rem;">
         <div class="card-body">
@@ -90,6 +98,45 @@ $patients = fetchAll("SELECT * FROM patients ORDER BY id ASC");
             <?php 
                 endforeach;
             }
+            ?>
+        </div>
+    </div>
+    </div>
+    <div style="display: flex;">
+    <div class="card" style="width: auto; margin: 1rem; padding: 1rem;">
+        <div class="card-body">
+            <h5 class="card-title">Stock | Refile </h5>
+            <?php 
+                if (empty($medicines)) {
+                    echo '<li class="list-group-item text-danger"><span class="badge bg-danger me-2">⚠️</span>Aucun médicament trouvé. Lancez db_init.php d\'abord!</li>';
+                } else {
+            ?>
+            <form method="post" action="refill.php">
+                <ul class="list-group list-group-flush">
+                <?php foreach ($medicines as $medicine): 
+                    $low_stock = $medicine['stock'] < 20;
+                    $badge_color = $low_stock ? 'bg-danger' : 'bg-primary';
+                ?>
+                    <li class="list-group-item d-flex justify-content-between align-items-center <?php echo $low_stock ? 'bg-warning bg-opacity-10' : ''; ?>">
+                        <div class="d-flex align-items-center">
+                            <input class="form-check-input me-2" type="checkbox" name="ids[]" value="<?php echo (int)$medicine['id']; ?>">
+                            <div>
+                                <strong><?php echo htmlspecialchars($medicine['name']); ?></strong>
+                                <?php if ($low_stock): ?>
+                                    <br><small class="text-danger fw-bold">⚠️ Stock faible!</small>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <span class="badge <?php echo $badge_color; ?> rounded-pill"><?php echo $medicine['stock']; ?></span>
+                    </li>
+                <?php endforeach; ?>
+                </ul>
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary">Refill selected</button>
+                </div>
+            </form>
+            <?php 
+                }
             ?>
         </div>
     </div>

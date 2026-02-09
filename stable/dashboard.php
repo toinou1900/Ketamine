@@ -1,6 +1,19 @@
 <?php
 require_once 'db_config.php';
 
+// Handle add patient POST request
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name']) && isset($_POST['last_name'])) {
+    $name = trim($_POST['name'] ?? '');
+    $last_name = trim($_POST['last_name'] ?? '');
+    
+    if (!empty($name) && !empty($last_name)) {
+        $sql = "INSERT INTO patients (name, last_name) VALUES (?, ?)";
+        executeQuery($sql, [$name, $last_name]);
+        header('Location: dashboard.php?patient_added=1');
+        exit;
+    }
+}
+
 // Récupérer tous les médicaments de la base de données
 $medicines = fetchAll("SELECT * FROM medicines ORDER BY id ASC");
 $patients = fetchAll("SELECT * FROM patients ORDER BY id ASC");
@@ -46,6 +59,9 @@ $patients = fetchAll("SELECT * FROM patients ORDER BY id ASC");
         <?php else: ?>
             <div class="alert alert-warning" role="alert">No items were refilled.</div>
         <?php endif; ?>
+    <?php endif; ?>
+    <?php if (isset($_GET['patient_added']) && $_GET['patient_added'] === '1'): ?>
+        <div class="alert alert-success" role="alert">Patient added successfully!</div>
     <?php endif; ?>
     <div style="display: flex;">
     <div class="card" style="width: auto; margin: 1rem; padding: 1rem;">
@@ -140,6 +156,66 @@ $patients = fetchAll("SELECT * FROM patients ORDER BY id ASC");
             ?>
         </div>
     </div>
+     <div class="card" style="width: auto; margin: 1rem; padding: 1rem;">
+            <div class="card-body">
+                <h5 class="card-title">Patients | Managers </h5>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="radioDefault" id="radioDefault2" checked>
+                  <label class="form-check-label" for="radioDefault2">
+                    Add
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="radioDefault" id="radioDefault1">
+                  <label class="form-check-label" for="radioDefault1">
+                    Remove
+                  </label>
+                </div>
+
+                <!-- Panels toggled by radios -->
+                <div id="addPanel" class="mt-3">
+                    <form method="post" action="">
+                        <div class="mb-2">
+                            <label class="form-label">Prénom</label>
+                            <input class="form-control" type="text" name="name" placeholder="Prénom">
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Nom</label>
+                            <input class="form-control" type="text" name="last_name" placeholder="Nom">
+                        </div>
+                        <button class="btn btn-success" type="submit">Ajouter patient</button>
+                    </form>
+                </div>
+                <div id="removePanel" class="mt-3 d-none">
+                    <div class="alert alert-secondary">Interface de suppression (non implémentée). Sélectionnez un patient puis supprimez-le.</div>
+                </div>
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const addRadio = document.getElementById('radioDefault2');
+                    const removeRadio = document.getElementById('radioDefault1');
+                    const addPanel = document.getElementById('addPanel');
+                    const removePanel = document.getElementById('removePanel');
+
+                    function updatePanels() {
+                        if (addRadio.checked) {
+                            addPanel.classList.remove('d-none');
+                            removePanel.classList.add('d-none');
+                        } else if (removeRadio.checked) {
+                            addPanel.classList.add('d-none');
+                            removePanel.classList.remove('d-none');
+                        }
+                    }
+
+                    addRadio.addEventListener('change', updatePanels);
+                    removeRadio.addEventListener('change', updatePanels);
+
+                    // Initial state
+                    updatePanels();
+                });
+                </script>
+
+            </div>
+        </div>
     </div>
 </body>
 </html>

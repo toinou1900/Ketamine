@@ -1,19 +1,6 @@
 <?php
 require_once 'db_config.php';
 
-// Handle add patient POST request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name']) && isset($_POST['last_name'])) {
-    $name = trim($_POST['name'] ?? '');
-    $last_name = trim($_POST['last_name'] ?? '');
-    
-    if (!empty($name) && !empty($last_name)) {
-        $sql = "INSERT INTO patients (name, last_name) VALUES (?, ?)";
-        executeQuery($sql, [$name, $last_name]);
-        header('Location: dashboard.php?patient_added=1');
-        exit;
-    }
-}
-
 // Récupérer tous les médicaments de la base de données
 $medicines = fetchAll("SELECT * FROM medicines ORDER BY id ASC");
 $patients = fetchAll("SELECT * FROM patients ORDER BY id ASC");
@@ -63,8 +50,11 @@ $patients = fetchAll("SELECT * FROM patients ORDER BY id ASC");
     <?php if (isset($_GET['patient_added']) && $_GET['patient_added'] === '1'): ?>
         <div class="alert alert-success" role="alert">Patient added successfully!</div>
     <?php endif; ?>
+    <?php if (isset($_GET['patient_removed']) && $_GET['patient_removed'] === '1'): ?>
+        <div class="alert alert-success" role="alert">Patient removed successfully!</div>
+    <?php endif; ?>
     <div style="display: flex;">
-    <div class="card" style="width: auto; margin: 1rem; padding: 1rem;">
+    <div class="card shadow-lg" style="width: auto; margin: 1rem; padding: 1rem;">
         <div class="card-body">
             <h5 class="card-title">Stock | Advanced viewer </h5>
             <small class="text-muted">💊 Total: <strong><?php echo count($medicines); ?></strong> médicaments</small>
@@ -96,7 +86,7 @@ $patients = fetchAll("SELECT * FROM patients ORDER BY id ASC");
             ?>
         </div>
     </div>
-    <div class="card" style="width: auto; margin: 1rem; padding: 1rem; text-align: center;">
+    <div class="card shadow-lg" style="width: auto; margin: 1rem; padding: 1rem; text-align: center;">
         <div class="card-body">
             <h5 class="card-title">Patients | Advanced viewer </h5>
             <small class="text-muted">👨‍⚕️ Total: <strong><?php echo count($patients); ?></strong> patients</small>
@@ -119,7 +109,7 @@ $patients = fetchAll("SELECT * FROM patients ORDER BY id ASC");
     </div>
     </div>
     <div style="display: flex;">
-    <div class="card" style="width: auto; margin: 1rem; padding: 1rem;">
+    <div class="card shadow-lg" style="width: auto; margin: 1rem; padding: 1rem;">
         <div class="card-body">
             <h5 class="card-title">Stock | Refile </h5>
             <?php 
@@ -148,7 +138,7 @@ $patients = fetchAll("SELECT * FROM patients ORDER BY id ASC");
                 <?php endforeach; ?>
                 </ul>
                 <div class="mt-3">
-                    <button type="submit" class="btn btn-primary">Refill selected</button>
+                    <button type="submit" class="btn btn-primary shadow-sm">Refill selected</button>
                 </div>
             </form>
             <?php 
@@ -156,7 +146,7 @@ $patients = fetchAll("SELECT * FROM patients ORDER BY id ASC");
             ?>
         </div>
     </div>
-     <div class="card" style="width: auto; margin: 1rem; padding: 1rem;">
+     <div class="card shadow-lg" style="width: auto; margin: 1rem; padding: 1rem;">
             <div class="card-body">
                 <h5 class="card-title">Patients | Managers </h5>
                 <div class="form-check">
@@ -174,20 +164,38 @@ $patients = fetchAll("SELECT * FROM patients ORDER BY id ASC");
 
                 <!-- Panels toggled by radios -->
                 <div id="addPanel" class="mt-3">
-                    <form method="post" action="">
+                    <form method="post" action="adduser.php">
                         <div class="mb-2">
-                            <label class="form-label">Prénom</label>
-                            <input class="form-control" type="text" name="name" placeholder="Prénom">
+                            <label class="form-label needs-validation">Prénom</label>
+                            <input class="form-control" type="text" name="name" placeholder="Prénom" required>
                         </div>
                         <div class="mb-2">
-                            <label class="form-label">Nom</label>
-                            <input class="form-control" type="text" name="last_name" placeholder="Nom">
+                            <label class="form-label needs-validation">Nom</label>
+                            <input class="form-control" type="text" name="last_name" placeholder="Nom" required>
                         </div>
-                        <button class="btn btn-success" type="submit">Ajouter patient</button>
+                        <button class="btn btn-success shadow-sm" type="submit">Ajouter patient</button>
                     </form>
                 </div>
-                <div id="removePanel" class="mt-3 d-none">
-                    <div class="alert alert-secondary">Interface de suppression (non implémentée). Sélectionnez un patient puis supprimez-le.</div>
+                <div id="removePanel" class="mt-3 d-none overflow-auto" style="max-height: 27.8rem;">
+                    <div class="alert alert-secondary">THIS ACTION CANNOT BE CANCELED.</div>
+                    <?php 
+                        if (empty($patients)) {
+                            echo '<li class="list-group-item text-danger"><span class="badge bg-danger me-2">⚠️</span>Aucun patient trouvé. Lancez db_init.php d\'abord!</li>';
+                        } else {
+                            foreach ($patients as $patient): 
+                        ?>
+                            <div style="width: auto; margin: 0.5rem; padding: 0.5rem;">
+                                <form method="post" action="remove_patient.php" style="display: inline;">
+                                    <strong><?php echo htmlspecialchars('id : ' . $patient['id']. ' name : ' . $patient['name'] . ' ' . $patient['last_name']); ?></strong>
+                                    <input type="hidden" name="name" value="<?php echo htmlspecialchars($patient['name']); ?>">
+                                    <button class="btn btn-sm btn-danger shadow-sm" type="submit">Supprimer</button>
+                                </form>
+                            </div>
+                        </li>
+                        <?php 
+                            endforeach;
+                        }
+                    ?>
                 </div>
                 <script>
                 document.addEventListener('DOMContentLoaded', function() {

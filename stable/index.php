@@ -40,7 +40,7 @@ $patients = fetchAll("SELECT * FROM patients ORDER BY id ASC");
 </header>
 <body>
     <div style="display: flex;">
-    <div class="card" style="width: 20rem; margin: 1rem; padding: 1rem;">
+    <div class="card shadow-lg" style="width: 20rem; margin: 1rem; padding: 1rem;">
         <div class="card-body">
             <h5 class="card-title">Stock</h5>
             <?php 
@@ -65,7 +65,7 @@ $patients = fetchAll("SELECT * FROM patients ORDER BY id ASC");
                 ?>
         </div>
     </div>
-    <div class="card" style="width: 20rem; margin: 1rem; padding: 1rem;">
+    <div class="card shadow-lg" style="width: 20rem; margin: 1rem; padding: 1rem;">
         <div class="card-body">
             <h5 class="card-title">Patients</h5>
             

@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </nav>
 </header>
 <body>
-    <div class="card" style="width: 20rem; margin: 1rem; padding: 1rem;">
+    <div class="card shadow-lg" style="width: 20rem; margin: 1rem; padding: 1rem;">
         <!-- Afficher le message de succès ou d'erreur -->
         <?php if (!empty($success_message)): ?>
             <div class="alert alert-success" role="alert">
@@ -106,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="exampleFormControlTextarea1" class="form-label">Message</label>
                 <textarea class="form-control" id="exampleFormControlTextarea1" name="message" rows="3" required></textarea>    
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary shadow-sm">Submit</button>
         </form>
     </div>
 </body>

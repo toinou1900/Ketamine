@@ -6,7 +6,7 @@
  */
 
 // Chemin de la base de données
-$db_path = __DIR__ . '/../../DB_Storage/dbKetamine.sqlite';
+$db_path = __DIR__ . '/../../../BES-DB/dbKetamine.sqlite';
 
 try {
     // Créer ou ouvrir la base de données SQLite

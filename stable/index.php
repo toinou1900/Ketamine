@@ -25,7 +25,7 @@ $patients = fetchAll("SELECT * FROM patients ORDER BY id ASC");
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="../../index.html">Go Back to the Hub</a>
+                        <a class="nav-link active" aria-current="page" href="/../BES-Hub/index.html">Go Back to the Hub</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="index.php">Home</a>

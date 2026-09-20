@@ -4,4 +4,4 @@
 
 ### (This projet was purely theoretical and wasn't meant to be used in real condition)
 
-### check it out at https://www.blackeaglestudio.fr/Ketamine/stable/index.php
+### check it out at : https://www.blackeaglestudio.fr/Ketamine/stable/index.php
